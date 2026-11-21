@@ -3,23 +3,459 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>de-faults · yumm lab</title>
-  <meta name="description" content="de-faults, a cook at yumm lab." />
+  <title>de-faults · use AI well · yumm lab</title>
+  <meta name="description" content="A short field guide from de-faults: what AI is good for, how the agentic loop works, and habits that save real time." />
   <link rel="canonical" href="https://yummlab.site/de-faults/" />
+  <meta name="theme-color" content="#f3f4f6" />
   <script src="/theme.js"></script>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Pixelify+Sans:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
   <link rel="stylesheet" href="/tokens.css" />
   <link rel="stylesheet" href="/de-faults/page.css" />
+  <!-- GSAP comes from the main site (same origin). Without it the page stays static and fully readable. -->
+  <script src="/vendor/gsap.min.js" defer></script>
+  <script src="/vendor/ScrollTrigger.min.js" defer></script>
+  <script src="/de-faults/i18n.js" defer></script>
+  <script src="/de-faults/page.js" defer></script>
+  <!-- Pixel effects (pixelfx, MIT). Decorative: the page is the same without them. -->
+  <script type="module" src="/de-faults/fx.js"></script>
 </head>
 <body>
-  <main class="card">
-    <img src="/de-faults/avatar.png" alt="" width="128" height="128" />
-    <h1>de-faults</h1>
-    <p>Page still in the oven.</p>
-    <a href="/">Back to yumm lab</a>
+  <a class="skip" href="#main" data-i18n="skip">Skip to content</a>
+
+  <header class="bar shell">
+    <a class="bar__back" href="/">
+      <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span data-i18n="bar.back">yumm lab</span>
+    </a>
+    <div class="bar__end">
+      <div class="lang" role="group" aria-label="Language" data-i18n-aria="lang.label">
+        <button type="button" class="lang__btn" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" class="lang__btn" data-lang="th" aria-pressed="false">TH</button>
+      </div>
+      <!-- hidden until page.js wires it: without JS a button that does nothing is worse than none -->
+      <button type="button" class="theme__btn" aria-pressed="false" aria-label="Dark mode" data-i18n-aria="theme.dark" hidden>
+        <svg class="theme__moon" viewBox="0 0 16 16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M13.5 9.6A5.75 5.75 0 0 1 6.4 2.5a5.75 5.75 0 1 0 7.1 7.1z"/></svg>
+        <svg class="theme__sun" viewBox="0 0 16 16" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="8" r="3"/><path d="M8 1.5v1.3M8 13.2v1.3M1.5 8h1.3M13.2 8h1.3M3.4 3.4l.9.9M11.7 11.7l.9.9M3.4 12.6l.9-.9M11.7 4.3l.9-.9"/></g></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ hero ============ -->
+    <section class="hero shell" aria-labelledby="hero-title">
+      <img class="hero__avatar" src="/de-faults/avatar.png" alt="" width="96" height="96" />
+      <p class="hero__who mono">de-faults</p>
+      <h1 id="hero-title" class="hero__title" data-i18n="hero.title">Use AI well.</h1>
+      <p class="hero__lede" data-i18n="hero.lede">A short field guide from de-faults: what AI is good for, how agents actually work, and the habits that save real time.</p>
+      <div class="screen screen--hero" data-fx="fireflies" aria-hidden="true"></div>
+      <p class="prompt" aria-label="Example prompt" data-i18n-aria="hero.promptLabel">
+        <span class="prompt__caret" aria-hidden="true">&gt;</span>
+        <span class="prompt__text" id="typer" data-i18n="hero.p1">summarise this meeting into 5 action items</span><span class="prompt__cursor" aria-hidden="true"></span>
+      </p>
+      <p class="hero__scroll mono" aria-hidden="true"><span data-i18n="hero.scroll">Scroll</span><span class="hero__line"></span></p>
+    </section>
+
+    <!-- ============ uses ============ -->
+    <section class="section shell" id="uses" aria-labelledby="uses-title">
+      <div class="head">
+        <h2 id="uses-title" class="title" data-i18n="uses.title">What AI is good for</h2>
+        <p class="head__aside" data-i18n="uses.aside">Seven everyday jobs. Each card ends with a prompt you can borrow.</p>
+      </div>
+      <ul class="uses" role="list">
+        <li class="use"><h3 class="use__t" data-i18n="uses.1.t">Learn</h3><p class="use__d" data-i18n="uses.1.d">Explain new topics, give examples, then quiz you back.</p><p class="use__p" data-i18n="uses.1.p">explain OAuth like I'm new, then quiz me</p></li>
+        <li class="use"><h3 class="use__t" data-i18n="uses.2.t">Write</h3><p class="use__d" data-i18n="uses.2.d">Draft emails, summarise meetings, translate, fit the tone to the reader.</p><p class="use__p" data-i18n="uses.2.p">rewrite this for my manager, 5 lines max</p></li>
+        <li class="use use--wide"><h3 class="use__t" data-i18n="uses.3.t">Code</h3><p class="use__d" data-i18n="uses.3.d">Write, debug, review, add tests, explain code you don't know.</p><p class="use__p" data-i18n="uses.3.p">why does this test fail? root cause first</p></li>
+        <li class="use"><h3 class="use__t" data-i18n="uses.4.t">Research</h3><p class="use__d" data-i18n="uses.4.d">Search the web, compare options, digest long docs and PDFs.</p><p class="use__p" data-i18n="uses.4.p">compare A vs B for a team of 5, cite sources</p></li>
+        <li class="use"><h3 class="use__t" data-i18n="uses.5.t">Data</h3><p class="use__d" data-i18n="uses.5.d">Clean CSV and Excel files, analyse them, chart them.</p><p class="use__p" data-i18n="uses.5.p">find the outliers in this sheet and explain them</p></li>
+        <li class="use"><h3 class="use__t" data-i18n="uses.6.t">Make</h3><p class="use__d" data-i18n="uses.6.d">Slides, documents, web pages, diagrams.</p><p class="use__p" data-i18n="uses.6.p">turn these notes into a 6-slide deck</p></li>
+        <li class="use use--volt"><h3 class="use__t" data-i18n="uses.7.t">Automate</h3><p class="use__d" data-i18n="uses.7.d">Work that repeats on a schedule: a morning digest, PR checks.</p><p class="use__p" data-i18n="uses.7.p">every weekday at 9, summarise new issues</p></li>
+      </ul>
+    </section>
+
+    <!-- ============ levels (pinned on large screens) ============ -->
+    <section class="levels" id="levels" aria-labelledby="levels-title">
+      <div class="levels__pin shell">
+        <div class="head head--tight">
+          <h2 id="levels-title" class="title" data-i18n="levels.title">Three levels of using AI</h2>
+          <p class="head__aside" data-i18n="levels.aside">Same request, three ways. The difference is who does the legwork.</p>
+        </div>
+        <div class="levels__grid">
+          <ol class="steps" role="list">
+            <li class="step" data-level="0"><span class="step__n">1</span><h3 class="step__t" data-i18n="lv.1.t">Chat</h3><p class="step__d" data-i18n="lv.1.d">You ask, it answers. You copy the result and do the work yourself.</p></li>
+            <li class="step" data-level="1"><span class="step__n">2</span><h3 class="step__t" data-i18n="lv.2.t">Assistant + tools</h3><p class="step__d" data-i18n="lv.2.d">It can read files, search, run code. It reports back, you decide.</p></li>
+            <li class="step" data-level="2"><span class="step__n">3</span><h3 class="step__t" data-i18n="lv.3.t">Agentic</h3><p class="step__d" data-i18n="lv.3.d">You give a goal and a finish line. It plans, acts, checks, and loops until done.</p></li>
+          </ol>
+          <div class="stage" role="group" aria-label="Example conversation" data-i18n-aria="lv.demo">
+            <div class="demo" data-level="0">
+              <p class="demo__n mono">1 · chat</p>
+              <p class="bubble bubble--me" data-i18n="lv.ask">Login is broken. Can you fix it?</p>
+              <p class="bubble bubble--ai" data-i18n="lv.1.ai">Probably the expiry check. Here's a patch to try: paste it in and run your tests.</p>
+            </div>
+            <div class="demo" data-level="1">
+              <p class="demo__n mono">2 · tools</p>
+              <p class="bubble bubble--me" data-i18n="lv.ask">Login is broken. Can you fix it?</p>
+              <p class="chips"><span class="chip">read_file auth.js</span><span class="chip">run npm test</span></p>
+              <p class="bubble bubble--ai" data-i18n="lv.2.ai">Found it: the expiry check uses &lt; instead of &lt;=. Patch and the failing test attached.</p>
+            </div>
+            <div class="demo" data-level="2">
+              <p class="demo__n mono">3 · agentic</p>
+              <p class="bubble bubble--me" data-i18n="lv.ask">Login is broken. Can you fix it?</p>
+              <p class="chips"><span class="chip">plan</span><span class="chip">edit auth.js</span><span class="chip chip--fail">test ✗</span><span class="chip">edit</span><span class="chip chip--pass">test ✓</span></p>
+              <div class="demo__end">
+                <p class="bubble bubble--ai" data-i18n="lv.3.ai">Fixed and verified. All tests pass. The diff is ready for your review.</p>
+                <div class="screen screen--level" data-fx="levelUp" aria-hidden="true" hidden></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ agentic loop (pinned on large screens) ============ -->
+    <section class="loop" id="loop" aria-labelledby="loop-title">
+      <div class="loop__pin shell">
+        <div class="head head--tight">
+          <h2 id="loop-title" class="title" data-i18n="loop.title">How the agentic loop works</h2>
+          <p class="head__aside" data-i18n="loop.aside">A goal goes in, then a loop: plan, act with tools, look at the result, check it against the finish line. Missed it? Go round again.</p>
+        </div>
+        <div class="loop__grid">
+          <div class="ring-wrap">
+          <svg class="ring" viewBox="0 0 480 480" role="img" aria-label="The agentic loop: goal, plan, act, observe, check, and repeat until done." data-i18n-aria="loop.svg">
+            <circle class="ring__track" cx="240" cy="240" r="150" />
+            <circle class="ring__trail" cx="240" cy="240" r="150" pathLength="1" transform="rotate(-90 240 240)" />
+            <g class="node" data-node="0"><rect x="219" y="69" width="42" height="42" /><text x="240" y="90">1</text></g>
+            <g class="node" data-node="1"><rect x="361.66" y="172.65" width="42" height="42" /><text x="382.66" y="193.65">2</text></g>
+            <g class="node" data-node="2"><rect x="307.17" y="340.35" width="42" height="42" /><text x="328.17" y="361.35">3</text></g>
+            <g class="node" data-node="3"><rect x="130.83" y="340.35" width="42" height="42" /><text x="151.83" y="361.35">4</text></g>
+            <g class="node node--check" data-node="4"><rect x="76.34" y="172.65" width="42" height="42" /><text x="97.34" y="193.65">5</text></g>
+            <text class="ring__label" x="240" y="36" data-i18n="loop.n1">Goal</text>
+            <text class="ring__label" x="432" y="160" data-i18n="loop.n2">Plan</text>
+            <text class="ring__label" x="364" y="418" data-i18n="loop.n3">Act</text>
+            <text class="ring__label" x="116" y="418" data-i18n="loop.n4">Observe</text>
+            <text class="ring__label" x="48" y="160" data-i18n="loop.n5">Check</text>
+            <text class="ring__center" id="loop-state" x="240" y="240" data-i18n="loop.center">until done</text>
+            <g class="ring__orbit" id="loop-orbit"><rect class="ring__token" x="231" y="81" width="18" height="18" /></g>
+          </svg>
+            <div class="screen screen--cam" data-fx="cam" aria-hidden="true" hidden></div>
+          </div>
+          <div class="log">
+            <p class="log__title mono" data-i18n="loop.log">One run, step by step</p>
+            <ol class="log__list" role="list">
+              <li data-pass="0"><span class="log__who" data-i18n="loop.n1">Goal</span><span data-i18n="log.0">fix login. Done = all tests pass.</span></li>
+              <li data-pass="1"><span class="log__who" data-i18n="loop.n2">Plan</span><span data-i18n="log.1">read the auth code, suspect the expiry check.</span></li>
+              <li data-pass="2"><span class="log__who" data-i18n="loop.n3">Act</span><span data-i18n="log.2">edit auth.js, run the tests.</span></li>
+              <li data-pass="3"><span class="log__who" data-i18n="loop.n4">Observe</span><span data-i18n="log.3">2 tests still fail.</span></li>
+              <li data-pass="4" class="is-fail"><span class="log__who" data-i18n="loop.n5">Check</span><span data-i18n="log.4">not done, so go round again.</span></li>
+              <li data-pass="5"><span class="log__who" data-i18n="loop.n2">Plan</span><span data-i18n="log.5">the fix missed refresh tokens.</span></li>
+              <li data-pass="6"><span class="log__who" data-i18n="loop.n3">Act</span><span data-i18n="log.6">patch the refresh path, re-run.</span></li>
+              <li data-pass="7"><span class="log__who" data-i18n="loop.n4">Observe</span><span data-i18n="log.7">all tests pass.</span></li>
+              <li data-pass="8" class="is-pass"><span class="log__who" data-i18n="loop.n5">Check</span><span data-i18n="log.8">done. Report back with the diff.</span></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section shell parts-wrap" aria-labelledby="parts-title">
+      <h2 id="parts-title" class="title title--sm" data-i18n="parts.title">What an agent is made of</h2>
+      <ul class="parts" role="list">
+        <li class="part"><h3 class="part__t" data-i18n="parts.1.t">Model</h3><p data-i18n="parts.1.d">Thinks, and decides the next step.</p></li>
+        <li class="part"><h3 class="part__t" data-i18n="parts.2.t">Tools</h3><p data-i18n="parts.2.d">Its hands: shell, file edits, browser, APIs, MCP servers.</p></li>
+        <li class="part"><h3 class="part__t" data-i18n="parts.3.t">Context</h3><p data-i18n="parts.3.d">What it knows: CLAUDE.md, project files, memory.</p></li>
+        <li class="part"><h3 class="part__t" data-i18n="parts.4.t">Guardrails</h3><p data-i18n="parts.4.d">Permissions, and the points where a human has to say yes.</p></li>
+      </ul>
+    </section>
+
+    <!-- ============ patterns ============ -->
+    <section class="section section--paper2" id="patterns" aria-labelledby="pat-title">
+      <div class="shell">
+        <div class="head">
+          <h2 id="pat-title" class="title" data-i18n="pat.title">Five patterns you'll meet</h2>
+          <p class="head__aside" data-i18n="pat.aside">Most agent systems are one of these, or two of them stacked.</p>
+        </div>
+        <ul class="patterns" role="list">
+          <li class="pattern">
+            <svg viewBox="0 0 240 120" role="img" aria-label="Three steps in a row, output passing left to right." data-i18n-aria="pat.1.a">
+              <line class="pt-edge" x1="54" y1="60" x2="102" y2="60" /><line class="pt-edge" x1="138" y1="60" x2="186" y2="60" />
+              <rect class="pt-node" x="18" y="46" width="36" height="28" rx="7" /><rect class="pt-node" x="102" y="46" width="36" height="28" rx="7" /><rect class="pt-node" x="186" y="46" width="36" height="28" rx="7" />
+              <rect class="flow" width="10" height="10" x="31" y="55" data-path="36,60 120,60 204,60" />
+            </svg>
+            <h3 class="pattern__t" data-i18n="pat.1.t">Prompt chain</h3>
+            <p data-i18n="pat.1.d">Split the job into steps. Each output feeds the next.</p>
+          </li>
+          <li class="pattern">
+            <svg viewBox="0 0 240 120" role="img" aria-label="One input, a router, and three specialists; each request goes to one." data-i18n-aria="pat.2.a">
+              <line class="pt-edge" x1="48" y1="60" x2="88" y2="60" />
+              <line class="pt-edge" x1="122" y1="60" x2="186" y2="22" /><line class="pt-edge" x1="122" y1="60" x2="186" y2="60" /><line class="pt-edge" x1="122" y1="60" x2="186" y2="98" />
+              <rect class="pt-node" x="12" y="46" width="36" height="28" rx="7" />
+              <rect class="pt-node pt-node--key" x="93" y="48" width="24" height="24" rx="4" transform="rotate(45 105 60)" />
+              <rect class="pt-node" x="186" y="10" width="36" height="24" rx="7" /><rect class="pt-node" x="186" y="48" width="36" height="24" rx="7" /><rect class="pt-node" x="186" y="86" width="36" height="24" rx="7" />
+              <rect class="flow" width="10" height="10" x="25" y="55" data-path="30,60 105,60 204,22" data-delay="0" />
+              <rect class="flow" width="10" height="10" x="25" y="55" data-path="30,60 105,60 204,98" data-delay="1.3" />
+              <rect class="flow" width="10" height="10" x="25" y="55" data-path="30,60 105,60 204,60" data-delay="2.6" />
+            </svg>
+            <h3 class="pattern__t" data-i18n="pat.2.t">Routing</h3>
+            <p data-i18n="pat.2.d">Classify first, then hand off to the right specialist.</p>
+          </li>
+          <li class="pattern">
+            <svg viewBox="0 0 240 120" role="img" aria-label="One task split to three workers at once, then merged." data-i18n-aria="pat.3.a">
+              <line class="pt-edge" x1="48" y1="60" x2="102" y2="22" /><line class="pt-edge" x1="48" y1="60" x2="102" y2="60" /><line class="pt-edge" x1="48" y1="60" x2="102" y2="98" />
+              <line class="pt-edge" x1="138" y1="22" x2="192" y2="60" /><line class="pt-edge" x1="138" y1="60" x2="192" y2="60" /><line class="pt-edge" x1="138" y1="98" x2="192" y2="60" />
+              <rect class="pt-node" x="12" y="46" width="36" height="28" rx="7" />
+              <rect class="pt-node" x="102" y="10" width="36" height="24" rx="7" /><rect class="pt-node" x="102" y="48" width="36" height="24" rx="7" /><rect class="pt-node" x="102" y="86" width="36" height="24" rx="7" />
+              <rect class="pt-node pt-node--key" x="192" y="46" width="36" height="28" rx="7" />
+              <rect class="flow" width="10" height="10" x="25" y="55" data-path="30,60 120,22 210,60" />
+              <rect class="flow" width="10" height="10" x="25" y="55" data-path="30,60 120,60 210,60" />
+              <rect class="flow" width="10" height="10" x="25" y="55" data-path="30,60 120,98 210,60" />
+            </svg>
+            <h3 class="pattern__t" data-i18n="pat.3.t">Parallel</h3>
+            <p data-i18n="pat.3.d">Fan out to several agents at once, then merge the results.</p>
+          </li>
+          <li class="pattern">
+            <svg viewBox="0 0 240 120" role="img" aria-label="A lead sends work out to three workers and gets results back." data-i18n-aria="pat.4.a">
+              <line class="pt-edge" x1="62" y1="60" x2="172" y2="22" /><line class="pt-edge" x1="62" y1="60" x2="172" y2="60" /><line class="pt-edge" x1="62" y1="60" x2="172" y2="98" />
+              <rect class="pt-node pt-node--key" x="18" y="40" width="44" height="40" rx="9" />
+              <rect class="pt-node" x="172" y="10" width="36" height="24" rx="7" /><rect class="pt-node" x="172" y="48" width="36" height="24" rx="7" /><rect class="pt-node" x="172" y="86" width="36" height="24" rx="7" />
+              <rect class="flow" width="10" height="10" x="35" y="55" data-path="40,60 190,22 40,60" data-delay="0" />
+              <rect class="flow" width="10" height="10" x="35" y="55" data-path="40,60 190,60 40,60" data-delay="0.5" />
+              <rect class="flow" width="10" height="10" x="35" y="55" data-path="40,60 190,98 40,60" data-delay="1" />
+            </svg>
+            <h3 class="pattern__t" data-i18n="pat.4.t">Orchestrator and workers</h3>
+            <p data-i18n="pat.4.d">A lead splits the work on the fly and collects it back.</p>
+          </li>
+          <li class="pattern">
+            <svg viewBox="0 0 240 120" role="img" aria-label="A maker and a checker passing work back and forth." data-i18n-aria="pat.5.a">
+              <path class="pt-edge" d="M78 52 Q120 20 162 52" fill="none" /><path class="pt-edge" d="M162 68 Q120 100 78 68" fill="none" />
+              <rect class="pt-node" x="42" y="44" width="36" height="32" rx="7" />
+              <rect class="pt-node pt-node--key" x="162" y="44" width="36" height="32" rx="7" />
+              <rect class="flow" width="10" height="10" x="55" y="55" data-path="60,60 120,36 180,60 120,84 60,60" />
+            </svg>
+            <h3 class="pattern__t" data-i18n="pat.5.t">Evaluator and optimizer</h3>
+            <p data-i18n="pat.5.d">One makes, one critiques. Repeat until it passes.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ when ============ -->
+    <section class="section shell" id="when" aria-labelledby="when-title">
+      <h2 id="when-title" class="title" data-i18n="when.title">Agent, or just ask?</h2>
+      <div class="when">
+        <div class="when__col when__col--yes">
+          <h3 class="when__t" data-i18n="when.yes">Use an agent when</h3>
+          <ul role="list">
+            <li data-i18n="when.y1">The job has several steps.</li>
+            <li data-i18n="when.y2">Success can be checked: tests pass, a build runs, a page loads.</li>
+            <li data-i18n="when.y3">It needs tools: files, a shell, search.</li>
+          </ul>
+        </div>
+        <div class="when__col when__col--no">
+          <h3 class="when__t" data-i18n="when.no">Just ask when</h3>
+          <ul role="list">
+            <li data-i18n="when.n1">One question gets you the answer.</li>
+            <li data-i18n="when.n2">There's no way to check the result automatically.</li>
+            <li data-i18n="when.n3">Speed and cost matter more than autonomy.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ howto ============ -->
+    <section class="section section--paper2" id="howto" aria-labelledby="howto-title">
+      <div class="shell">
+        <div class="head">
+          <h2 id="howto-title" class="title" data-i18n="howto.title">Do it yourself</h2>
+          <p class="head__aside" data-i18n="howto.aside">Four recipes, in order. Each one says why, then how, then gives you a file to copy.</p>
+        </div>
+        <nav class="howto__nav" aria-label="Recipes" data-i18n-aria="howto.nav">
+          <ol role="list">
+            <li><a href="#rc-1"><span class="howto__n" aria-hidden="true">01</span> <span data-i18n="rc.1.t">Write AGENTS.md</span></a></li>
+            <li><a href="#rc-2"><span class="howto__n" aria-hidden="true">02</span> <span data-i18n="rc.2.t">Run an agentic task</span></a></li>
+            <li><a href="#rc-3"><span class="howto__n" aria-hidden="true">03</span> <span data-i18n="rc.3.t">Create a skill</span></a></li>
+            <li><a href="#rc-4"><span class="howto__n" aria-hidden="true">04</span> <span data-i18n="rc.4.t">Extend the agent</span></a></li>
+          </ol>
+        </nav>
+
+        <!-- ============ recipe 1: AGENTS.md ============ -->
+        <article class="recipe" id="rc-1" aria-labelledby="rc-1-title">
+          <div class="recipe__main">
+            <p class="recipe__n" aria-hidden="true">01</p>
+            <h3 id="rc-1-title" class="recipe__t" data-i18n="rc.1.t">Write AGENTS.md</h3>
+            <p class="recipe__why" data-i18n="rc.1.why">An agent starts every session knowing nothing about your project. This file is read first, every time, so you stop explaining the same things.</p>
+            <ol class="recipe__steps" role="list">
+              <li class="rstep"><span class="rstep__n">1</span><h4 class="rstep__t" data-i18n="rc.1.s1.t">Create it at the root</h4><p class="rstep__d" data-i18n="rc.1.s1.d">One AGENTS.md in the repo. Codex, Cursor and Copilot read it as is. If your tool wants another name (CLAUDE.md, GEMINI.md), point that file at this one.</p></li>
+              <li class="rstep"><span class="rstep__n">2</span><h4 class="rstep__t" data-i18n="rc.1.s2.t">Write what it can't guess</h4><p class="rstep__d" data-i18n="rc.1.s2.d">What the project is, how to run and test it, the rules, and what done means.</p></li>
+              <li class="rstep"><span class="rstep__n">3</span><h4 class="rstep__t" data-i18n="rc.1.s3.t">Keep it short</h4><p class="rstep__d" data-i18n="rc.1.s3.d">It loads every session and takes up context every time. Cut anything the code already says.</p></li>
+              <li class="rstep"><span class="rstep__n">4</span><h4 class="rstep__t" data-i18n="rc.1.s4.t">Grow it from mistakes</h4><p class="rstep__d" data-i18n="rc.1.s4.d">When the agent gets the same thing wrong twice, add one line so there's no third time.</p></li>
+            </ol>
+          </div>
+          <figure class="file">
+            <figcaption class="file__cap mono" data-i18n="rc.1.file">Example AGENTS.md</figcaption>
+<pre class="file__body"><code id="agents-md"># AGENTS.md
+
+## What this is
+Static page served by a Cloudflare Worker.
+No build step. Files live in public/de-faults/.
+
+## Run
+npx wrangler dev
+
+## Rules
+- Colours and fonts come from /tokens.css.
+- No inline scripts or styles (strict CSP).
+- Done = page loads with no console errors.
+- Ask before pushing: main deploys to prod.</code></pre>
+            <div class="fx-overlay fx-overlay--coin" data-fx="coinCollect" aria-hidden="true" hidden></div>
+          </figure>
+        </article>
+
+        <!-- ============ recipe 2: agentic task ============ -->
+        <article class="recipe" id="rc-2" aria-labelledby="rc-2-title">
+          <div class="recipe__main">
+            <p class="recipe__n" aria-hidden="true">02</p>
+            <h3 id="rc-2-title" class="recipe__t" data-i18n="rc.2.t">Run an agentic task</h3>
+            <p class="recipe__why" data-i18n="rc.2.why">An agent keeps going round the loop until the job is done, but only if you tell it what done looks like.</p>
+            <ol class="recipe__steps" role="list">
+              <li class="rstep"><span class="rstep__n">1</span><h4 class="rstep__t" data-i18n="rc.2.s1.t">Give a goal, a finish line, limits</h4><p class="rstep__d" data-i18n="rc.2.s1.d">What you want, how to check that it worked, and what it must not touch.</p></li>
+              <li class="rstep"><span class="rstep__n">2</span><h4 class="rstep__t" data-i18n="rc.2.s2.t">Plan first</h4><p class="rstep__d" data-i18n="rc.2.s2.d">Ask for a plan before any edits. Read it, fix what's wrong, then say go.</p></li>
+              <li class="rstep"><span class="rstep__n">3</span><h4 class="rstep__t" data-i18n="rc.2.s3.t">Let it loop</h4><p class="rstep__d" data-i18n="rc.2.s3.d">It reads, edits, runs the checks and goes round again. When it asks before a risky step, you decide.</p></li>
+              <li class="rstep"><span class="rstep__n">4</span><h4 class="rstep__t" data-i18n="rc.2.s4.t">Review the result</h4><p class="rstep__d" data-i18n="rc.2.s4.d">Read the diff and run it yourself. The agent saying “done” is a claim, not proof.</p></li>
+              <li class="rstep"><span class="rstep__n">5</span><h4 class="rstep__t" data-i18n="rc.2.s5.t">Commit or roll back</h4><p class="rstep__d" data-i18n="rc.2.s5.d">Good: commit. Off track: revert, sharpen the prompt, run it again.</p></li>
+            </ol>
+          </div>
+          <figure class="file">
+            <figcaption class="file__cap mono" data-i18n="rc.2.file">Example prompt</figcaption>
+<pre class="file__body"><code data-i18n="rc.2.code">Goal: users can reset their password by email.
+
+Done when:
+- npm test passes, including a new test for reset
+- no new dependencies
+
+Limits:
+- only touch src/auth/
+- ask before changing the database
+
+First read the auth code and show me a plan.
+Wait for my OK before you edit anything.</code></pre>
+          </figure>
+        </article>
+
+        <!-- ============ recipe 3: skill ============ -->
+        <article class="recipe" id="rc-3" aria-labelledby="rc-3-title">
+          <div class="recipe__main">
+            <p class="recipe__n" aria-hidden="true">03</p>
+            <h3 id="rc-3-title" class="recipe__t" data-i18n="rc.3.t">Create a skill</h3>
+            <p class="recipe__why" data-i18n="rc.3.why">A skill is a folder of instructions the agent loads only when a task matches it. Write a procedure once, reuse it for good, and pay nothing for it when it isn't needed.</p>
+            <ol class="recipe__steps" role="list">
+              <li class="rstep"><span class="rstep__n">1</span><h4 class="rstep__t" data-i18n="rc.3.s1.t">Spot a repeat</h4><p class="rstep__d" data-i18n="rc.3.s1.d">Typed the same long prompt three times? Explained the same steps again? That's a skill.</p></li>
+              <li class="rstep"><span class="rstep__n">2</span><h4 class="rstep__t" data-i18n="rc.3.s2.t">Make the folder</h4><p class="rstep__d" data-i18n="rc.3.s2.d">A folder named after the skill with a SKILL.md inside, in your tool's skills folder: for example .agents/skills/, .claude/skills/ or .github/skills/.</p></li>
+              <li class="rstep"><span class="rstep__n">3</span><h4 class="rstep__t" data-i18n="rc.3.s3.t">Write the description well</h4><p class="rstep__d" data-i18n="rc.3.s3.d">The top of the file needs a name and a description. The agent picks skills by the description alone, so say what it does and when to use it.</p></li>
+              <li class="rstep"><span class="rstep__n">4</span><h4 class="rstep__t" data-i18n="rc.3.s4.t">Write the steps</h4><p class="rstep__d" data-i18n="rc.3.s4.d">The body holds the steps, the checks and the output format. Scripts or templates can sit beside it in the folder.</p></li>
+              <li class="rstep"><span class="rstep__n">5</span><h4 class="rstep__t" data-i18n="rc.3.s5.t">Test it, then tune it</h4><p class="rstep__d" data-i18n="rc.3.s5.d">Ask for the task in your own words. It didn't kick in? Fix the description. It went wrong? Fix that step.</p></li>
+            </ol>
+          </div>
+          <figure class="file">
+            <figcaption class="file__cap mono" data-i18n="rc.3.file">Example: weekly-report/SKILL.md</figcaption>
+<pre class="file__body"><code>---
+name: weekly-report
+description: Write the weekly team report from merged PRs and closed issues. Use when asked for a weekly report, a status update or "what did we ship".
+---
+
+# Weekly report
+
+1. List PRs merged and issues closed in the last 7 days.
+2. Group them by project. Skip bots and typo fixes.
+3. One line per group: what changed, why it matters.
+4. End with blockers, if any.
+
+Output: Markdown, under 200 words, no jargon.
+Check: every line links to its PR or issue.</code></pre>
+          </figure>
+        </article>
+
+        <!-- ============ recipe 4: hooks, MCP, subagents ============ -->
+        <article class="recipe recipe--ext" id="rc-4" aria-labelledby="rc-4-title">
+          <div class="recipe__main">
+            <p class="recipe__n" aria-hidden="true">04</p>
+            <h3 id="rc-4-title" class="recipe__t" data-i18n="rc.4.t">Extend the agent</h3>
+            <p class="recipe__why" data-i18n="rc.4.why">Three ways to give an agent more reach without writing a longer prompt.</p>
+          </div>
+          <ul class="exts" role="list">
+            <li class="ext">
+              <h4 class="ext__t" data-i18n="rc.4.h.t">Hooks</h4>
+              <p class="ext__d" data-i18n="rc.4.h.d">A command that runs by itself before or after the agent uses a tool: format each edited file, block edits to secrets, run the tests at the end. Claude Code, Cursor and Gemini CLI all have them; the config differs.</p>
+              <p class="ext__w" data-i18n="rc.4.h.w">A hook runs with your permissions. Read one before you install it.</p>
+              <figure class="file file--sm">
+                <figcaption class="file__cap mono" data-i18n="rc.4.h.file">The idea (each tool's config differs)</figcaption>
+<pre class="file__body"><code>on:   after each file edit
+run:  npx prettier --write &lt;edited file&gt;</code></pre>
+              </figure>
+            </li>
+            <li class="ext">
+              <h4 class="ext__t" data-i18n="rc.4.m.t">MCP</h4>
+              <p class="ext__d" data-i18n="rc.4.m.d">One standard plug for outside tools: GitHub, a database, a browser, your files. Add a server once and any agent that speaks MCP can use it.</p>
+              <p class="ext__w" data-i18n="rc.4.m.w">Only connect servers you trust: they can read and act on whatever you open to them.</p>
+              <figure class="file file--sm">
+                <figcaption class="file__cap mono" data-i18n="rc.4.m.file">Example MCP config</figcaption>
+<pre class="file__body"><code>{
+  "mcpServers": {
+    "files": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "./docs"]
+    }
+  }
+}</code></pre>
+              </figure>
+            </li>
+            <li class="ext">
+              <h4 class="ext__t" data-i18n="rc.4.s.t">Subagents</h4>
+              <p class="ext__d" data-i18n="rc.4.s.d">A fresh agent for a side job, like searching the code or reviewing a diff. It works in its own context and hands back only the answer, so your main session stays clean.</p>
+              <figure class="file file--sm">
+                <figcaption class="file__cap mono" data-i18n="rc.4.s.file">Example prompt</figcaption>
+<pre class="file__body"><code data-i18n="rc.4.s.code">Use a subagent to find every caller of parseDate().
+Report file:line only, 10 lines at most.</code></pre>
+              </figure>
+            </li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ tips ============ -->
+    <section class="section shell" id="tips" aria-labelledby="tips-title">
+      <div class="head">
+        <h2 id="tips-title" class="title" data-i18n="tips.title">Habits that save real time</h2>
+        <p class="head__aside" data-i18n="tips.aside">Ten things that separate a useful session from a wasted one.</p>
+      </div>
+      <ol class="tips__list" role="list">
+        <li class="tip"><span class="tip__n">01</span><h3 class="tip__t" data-i18n="tip.1.t">Write the context down</h3><p class="tip__d" data-i18n="tip.1.d">Keep a CLAUDE.md or AGENTS.md: what the project is, how to run it, the rules. Stop repeating yourself.</p></li>
+        <li class="tip"><span class="tip__n">02</span><h3 class="tip__t" data-i18n="tip.2.t">Define done</h3><p class="tip__d" data-i18n="tip.2.d">“Tests pass” or “the page loads with no errors” lets the agent check its own work.</p></li>
+        <li class="tip"><span class="tip__n">03</span><h3 class="tip__t" data-i18n="tip.3.t">Plan before big changes</h3><p class="tip__d" data-i18n="tip.3.d">Ask for a plan, read it, then let it build.</p></li>
+        <li class="tip"><span class="tip__n">04</span><h3 class="tip__t" data-i18n="tip.4.t">Keep tasks small</h3><p class="tip__d" data-i18n="tip.4.d">One thing at a time. Easier to review, easier to undo.</p></li>
+        <li class="tip"><span class="tip__n">05</span><h3 class="tip__t" data-i18n="tip.5.t">Commit often</h3><p class="tip__d" data-i18n="tip.5.d">Git is your safety net. If the agent breaks something, revert.</p></li>
+        <li class="tip"><span class="tip__n">06</span><h3 class="tip__t" data-i18n="tip.6.t">Turn repeats into skills</h3><p class="tip__d" data-i18n="tip.6.d">A prompt you type every week belongs in a skill or a slash command.</p></li>
+        <li class="tip"><span class="tip__n">07</span><h3 class="tip__t" data-i18n="tip.7.t">Automate with hooks</h3><p class="tip__d" data-i18n="tip.7.d">Format, lint or test automatically before or after each tool call.</p></li>
+        <li class="tip"><span class="tip__n">08</span><h3 class="tip__t" data-i18n="tip.8.t">Run work in parallel</h3><p class="tip__d" data-i18n="tip.8.d">Separate git worktrees, separate sessions, no collisions.</p></li>
+        <li class="tip"><span class="tip__n">09</span><h3 class="tip__t" data-i18n="tip.9.t">Stay the reviewer</h3><p class="tip__d" data-i18n="tip.9.d">Deploys, deletes and messages to the outside world need a human yes.</p></li>
+        <li class="tip"><span class="tip__n">10</span><h3 class="tip__t" data-i18n="tip.10.t">Verify what matters</h3><p class="tip__d" data-i18n="tip.10.d">AI can be confidently wrong. Check important facts at the source.</p></li>
+      </ol>
+    </section>
   </main>
+
+  <footer class="foot">
+    <div class="shell foot__inner">
+      <div class="foot__top">
+        <p class="foot__line" data-i18n="foot.line">Fast is good. Checked is better.</p>
+        <div class="fx-overlay fx-overlay--quest" data-fx="questDone" aria-hidden="true" hidden></div>
+      </div>
+      <div class="foot__row">
+        <a class="foot__back" href="/" data-i18n="foot.back">Back to yumm lab</a>
+        <p class="foot__credit mono" data-i18n="foot.credit">de-faults · a cook at yumm lab</p>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
