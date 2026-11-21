@@ -22,7 +22,7 @@ This Worker (`yummlab-de-faults`) has no routes. The `yummlab-site` Worker (repo
 ## Rules
 
 - **Copy**: every visible string is a `data-i18n="key"` (or `data-i18n-aria`) in `index.html` with the same key in both `en` and `th`. `page.js` applies it with `textContent`, so copy is plain text.
-- **CSP**: scripts and styles load from this origin as files; fonts only from Google Fonts. Style dynamic values through the CSSOM (`el.style.x = ...`).
+- **CSP**: scripts and styles load from this origin as files; fonts only from Google Fonts. Only outside script: the Cloudflare Web Analytics beacon Cloudflare injects (`static.cloudflareinsights.com`, reports to `cloudflareinsights.com`); keep it in step with the main site. Style dynamic values through the CSSOM (`el.style.x = ...`).
 - **Look**: colours, spacing and motion come from `/tokens.css` (light + dark); `page.css` only re-points font (Pixelify Sans, Thai falls back to Chakra Petch) and radius (0) tokens. Pixel frames use the `--frame` box-shadow; motion eases are `steps(n)`. pixelfx's Patch Pixel font is not MIT: keep it out.
 - **Progressive enhancement**: all copy is readable with no JS, no GSAP and no `fx.js`. Set initial animation states in JS, so the CSS default is the visible, final state. `prefers-reduced-motion` gets a static page.
 - **Pinning**: CSS `position: sticky` + `.is-pinned`, only at `PIN_OK` in `page.js` (`min-width: 1024px` and `min-height: 680px`); smaller screens overflow, so the loop auto-plays in normal flow there.

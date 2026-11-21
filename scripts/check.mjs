@@ -57,7 +57,7 @@ if (dict.en && dict.th) {
   }
 }
 
-// --- CSP (public/_headers: script-src 'self', style-src 'self' + Google Fonts): nothing inline ---
+// --- CSP (public/_headers: script-src 'self' + Cloudflare beacon, style-src 'self' + Google Fonts): nothing inline ---
 for (const [, attrs] of html.matchAll(/<script\b([^>]*)>/g)) {
   if (!/\bsrc=/.test(attrs)) errors.push("csp: inline <script> in index.html (CSP blocks it): move it to a file");
 }
