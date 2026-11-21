@@ -1,0 +1,84 @@
+#!/bin/sh
+# One entry point for every task in this repo. Run `./dev` for the list.
+set -eu
+cd "$(dirname "$0")"
+
+WRANGLER="npx --yes wrangler@4.153.0" # same pin as .github/workflows/deploy.yml
+SITE=${SITE:-../yummlab.site}         # main site checkout: serves /tokens.css, /theme.js, /vendor/gsap*
+LIVE=https://yummlab.site
+
+need() { command -v "$1" >/dev/null 2>&1 || { echo "dev: $1 not found ($2)" >&2; return 1; }; }
+
+usage() {
+  cat <<'EOF'
+./dev init             set up this clone (git hooks, tool check) then run check
+./dev worker [args]    both Workers via ../yummlab.site: https://localhost:8787/de-faults/ (self-signed)
+./dev map              line-numbered section index of every source file (read sections, not files)
+./dev check            i18n keys, local refs, CSP-safe markup, JS syntax
+./dev live             compare https://yummlab.site/de-faults/* with public/de-faults/ byte for byte
+./dev deploy           check, deploy to Cloudflare, then live (push to main does this via CI)
+./dev pixelfx <clone>  rebuild vendor/pixelfx.min.js from a patch-gg/pixelfx checkout
+EOF
+}
+
+cmd=${1:-help}
+[ $# -gt 0 ] && shift
+
+case "$cmd" in
+  init)
+    git config core.hooksPath .githooks
+    echo "dev: git hooks -> .githooks (secret scan on commit)"
+    need node "required: check, map, wrangler"
+    need npx "required: wrangler"
+    need curl "optional: ./dev live" || true
+    [ -f "$SITE/wrangler.toml" ] || echo "dev: optional: clone yumm-lab/yummlab.site to $SITE for ./dev worker" >&2
+    exec "$0" check
+    ;;
+  worker)
+    [ -f "$SITE/wrangler.toml" ] || { echo "dev: need yumm-lab/yummlab.site at $SITE (or set SITE=)" >&2; exit 1; }
+    here=$(pwd)
+    cd "$SITE"
+    # https: wrangler dev hands the Worker the production host, so plain http gets redirected
+    exec $WRANGLER dev -c wrangler.toml -c "$here/wrangler.toml" --local-protocol https "$@"
+    ;;
+  map)
+    need node "install Node.js"
+    exec node scripts/map.mjs
+    ;;
+  check)
+    need node "install Node.js"
+    exec node scripts/check.mjs
+    ;;
+  live)
+    need curl "install curl"
+    fail=0
+    for f in $(cd public/de-faults && find . -type f | sed 's|^\./||' | sort); do
+      path="/de-faults/$f"
+      [ "$f" = index.html ] && path=/de-faults/
+      if curl -fsS --retry 5 --retry-delay 3 "$LIVE$path" | cmp -s - "public/de-faults/$f"; then
+        echo "ok    $path"
+      else
+        echo "FAIL  live $path differs from public/de-faults/$f"
+        [ -n "${GITHUB_ACTIONS:-}" ] && echo "::error::live $path differs from public/de-faults/$f"
+        fail=1
+      fi
+    done
+    exit $fail
+    ;;
+  deploy)
+    node scripts/check.mjs
+    $WRANGLER deploy
+    exec "$0" live
+    ;;
+  pixelfx)
+    exec sh scripts/pixelfx.sh "$@"
+    ;;
+  help | -h | --help)
+    usage
+    ;;
+  *)
+    echo "dev: unknown command '$cmd'" >&2
+    usage >&2
+    exit 1
+    ;;
+esac

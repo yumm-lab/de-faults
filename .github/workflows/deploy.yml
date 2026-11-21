@@ -15,6 +15,8 @@ on:
       - "public/**"
       - "src/**"
       - "wrangler.toml"
+      - "dev"
+      - "scripts/**"
       - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
@@ -38,6 +40,10 @@ jobs:
         with:
           persist-credentials: false
 
+      # i18n keys, local refs, CSP-safe markup, JS syntax (same as ./dev check)
+      - name: Check
+        run: node scripts/check.mjs
+
       - name: Deploy with Wrangler
         uses: cloudflare/wrangler-action@953926a2e2182532811c01a25e53647d93bf07c0 # v4.1.3
         with:
@@ -46,12 +52,6 @@ jobs:
           wranglerVersion: "4.153.0"
           command: deploy
 
-      # The live page must serve exactly what was just deployed.
+      # The live page must serve exactly what was just deployed (every file in public/de-faults/).
       - name: Smoke check
-        run: |
-          set -euo pipefail
-          for f in index.html page.css; do
-            path="/de-faults/$f"; [ "$f" = index.html ] && path="/de-faults/"
-            curl -fsS --retry 5 --retry-delay 3 "https://yummlab.site$path" | cmp -s - "public/de-faults/$f" \
-              || { echo "::error::live $path differs from public/de-faults/$f"; exit 1; }
-          done
+        run: sh ./dev live

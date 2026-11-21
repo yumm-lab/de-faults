@@ -6,7 +6,7 @@ bad=$(git diff --cached --name-only --diff-filter=ACM | grep -E '(^|/)(\.env(\..
 if [ -n "$bad" ]; then
   echo "pre-commit: refusing to commit secret-looking files:"; echo "$bad"; exit 1
 fi
-hits=$(git diff --cached -U0 --diff-filter=ACM -- . ':(exclude)public/vendor/*' | grep -E '^\+' | grep -nE "$pattern")
+hits=$(git diff --cached -U0 --diff-filter=ACM -- . ':(exclude)public/de-faults/vendor/*' | grep -E '^\+' | grep -nE "$pattern")
 if [ -n "$hits" ]; then
   echo "pre-commit: possible secret in staged changes:"; echo "$hits" | cut -c1-160; exit 1
 fi
