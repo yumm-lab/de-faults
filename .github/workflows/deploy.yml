@@ -1,0 +1,57 @@
+# Deploy the yummlab-de-faults Worker on every push to main that touches the
+# page. Same as running `npx wrangler deploy` locally. The page goes live at
+# https://yummlab.site/de-faults/ through the yummlab-site Worker's binding.
+#
+# Needs, in the "production" environment (Settings > Environments):
+#   CLOUDFLARE_API_TOKEN   custom token: Account > Workers Scripts: Edit
+#                          (no zone permissions: this Worker has no routes)
+#   CLOUDFLARE_ACCOUNT_ID  account that owns the yummlab-site Worker
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "public/**"
+      - "src/**"
+      - "wrangler.toml"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# one deploy at a time; never cancel one halfway through
+concurrency:
+  group: deploy-de-faults
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: production
+      url: https://yummlab.site/de-faults/
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Deploy with Wrangler
+        uses: cloudflare/wrangler-action@953926a2e2182532811c01a25e53647d93bf07c0 # v4.1.3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "4.153.0"
+          command: deploy
+
+      # The live page must serve exactly what was just deployed.
+      - name: Smoke check
+        run: |
+          set -euo pipefail
+          for f in index.html page.css; do
+            path="/de-faults/$f"; [ "$f" = index.html ] && path="/de-faults/"
+            curl -fsS --retry 5 --retry-delay 3 "https://yummlab.site$path" | cmp -s - "public/de-faults/$f" \
+              || { echo "::error::live $path differs from public/de-faults/$f"; exit 1; }
+          done

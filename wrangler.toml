@@ -1,0 +1,13 @@
+# de-faults' page, served at https://yummlab.site/de-faults/.
+# This Worker has no routes and no public hostname: the yummlab-site Worker
+# (repo yumm-lab/yummlab.site) forwards /de-faults and /de-faults/* to it
+# through a service binding. That is why the files live under public/de-faults/.
+name = "yummlab-de-faults"
+main = "src/worker.js"
+compatibility_date = "2026-10-01"
+workers_dev = false
+preview_urls = false
+
+[assets]
+directory = "./public"
+binding = "ASSETS"

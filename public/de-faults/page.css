@@ -1,0 +1,13 @@
+/* Placeholder until the real page lands. Colours, type and spacing come from
+ * the main site's /tokens.css (same origin), so light/dark follows theme.js. */
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0; min-height: 100vh; display: grid; place-items: center; padding: var(--space-xl);
+  background: var(--color-paper); color: var(--color-ink); font-family: var(--font-body); font-size: var(--text-base);
+}
+.card { display: grid; justify-items: center; gap: var(--space-md); text-align: center; }
+.card img { width: 128px; height: 128px; border-radius: var(--radius-md); box-shadow: 0 0 0 1px var(--color-rule); }
+.card h1 { margin: 0; font-family: var(--font-display); font-size: var(--text-3xl); line-height: 1; }
+.card p { margin: 0; color: var(--color-ink-2); font-family: var(--font-label); font-size: var(--text-sm); }
+.card a { color: var(--color-ink); text-underline-offset: 4px; }
+:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; border-radius: 2px; }
