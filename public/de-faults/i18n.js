@@ -1,6 +1,6 @@
 // Copy for both languages. Keys match data-i18n / data-i18n-aria in index.html.
 // page.js applies these with textContent only, never innerHTML.
-window.DEFAULTS_I18N = {
+globalThis.DEFAULTS_I18N = {
   en: {
     "meta.title": "de-faults · use AI well · yumm lab",
     "meta.desc": "A short field guide from de-faults: what AI is good for, how the agentic loop works, and habits that save real time.",

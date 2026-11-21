@@ -63,6 +63,14 @@ case "$cmd" in
         fail=1
       fi
     done
+    # /de-faults/th/ has no file: src/worker.js renders it from index.html + i18n.js
+    if curl -fsS --retry 5 --retry-delay 3 "$LIVE/de-faults/th/" | grep -q '<html lang="th"'; then
+      echo "ok    /de-faults/th/"
+    else
+      echo "FAIL  live /de-faults/th/ is not the Thai page"
+      [ -n "${GITHUB_ACTIONS:-}" ] && echo "::error::live /de-faults/th/ is not the Thai page"
+      fail=1
+    fi
     exit $fail
     ;;
   deploy)

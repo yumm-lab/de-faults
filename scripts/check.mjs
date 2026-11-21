@@ -29,9 +29,9 @@ for (const f of [`${PAGE}/page.js`, `${PAGE}/i18n.js`, `${PAGE}/fx.js`, "src/wor
 }
 
 // --- i18n: keys used in index.html / JS exist in both languages, and en/th agree ---
-const sandbox = { window: {} };
+const sandbox = {}; // i18n.js assigns globalThis.DEFAULTS_I18N, which is the sandbox itself
 vm.runInNewContext(read(`${PAGE}/i18n.js`), sandbox);
-const dict = sandbox.window.DEFAULTS_I18N ?? {};
+const dict = sandbox.DEFAULTS_I18N ?? {};
 const langs = ["en", "th"];
 for (const lang of langs) if (!dict[lang]) errors.push(`i18n: missing language "${lang}" in ${PAGE}/i18n.js`);
 const en = dict.en ?? {};
@@ -59,7 +59,8 @@ if (dict.en && dict.th) {
 
 // --- CSP (public/_headers: script-src 'self' + Cloudflare beacon, style-src 'self' + Google Fonts): nothing inline ---
 for (const [, attrs] of html.matchAll(/<script\b([^>]*)>/g)) {
-  if (!/\bsrc=/.test(attrs)) errors.push("csp: inline <script> in index.html (CSP blocks it): move it to a file");
+  // JSON-LD is a data block: never executed, so CSP does not apply
+  if (!/\bsrc=/.test(attrs) && !/type="application\/ld\+json"/.test(attrs)) errors.push("csp: inline <script> in index.html (CSP blocks it): move it to a file");
 }
 if (/<style\b/.test(html)) errors.push("csp: <style> in index.html: move it to page.css");
 if (/\sstyle="/.test(html)) errors.push('csp: style="" attribute in index.html: use a class or set it via the CSSOM');
@@ -75,9 +76,12 @@ const refs = new Set([
   ...[...html.matchAll(/(?:src|href)="(\/[^"#?]*)"/g)].map((m) => m[1]),
   ...[...allJs.matchAll(/["'](\/de-faults\/[^"'#?]+)["']/g)].map((m) => m[1]),
 ]);
+// rendered by src/worker.js, no file behind them
+const WORKER_PATHS = new Set(["/de-faults/th/"]);
 const hasSite = existsSync(join(SITE, "public"));
 const siteRefs = [];
 for (const ref of refs) {
+  if (WORKER_PATHS.has(ref)) continue;
   const file = ref.endsWith("/") ? `${ref}index.html` : ref;
   if (ref.startsWith("/de-faults/")) {
     if (!existsSync(join(ROOT, "public", file))) errors.push(`refs: ${ref}, no file public${file}`);

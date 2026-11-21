@@ -62,7 +62,17 @@
   const langListeners = [];
   let lang = "en";
 
+  // Each language has its own URL so search engines index both: /de-faults/ is
+  // English, /de-faults/th/ is Thai (the Worker serves it with the Thai copy in place).
+  const LANG_PATH = { en: "/de-faults/", th: "/de-faults/th/" };
+  const syncUrl = (next) => {
+    if (location.pathname === LANG_PATH[next]) return;
+    if (!Object.values(LANG_PATH).includes(location.pathname)) return;
+    history.replaceState(null, "", LANG_PATH[next] + location.search + location.hash);
+  };
+
   function initialLang() {
+    if (location.pathname === LANG_PATH.th) return "th";
     const saved = local.get(LANG_KEY);
     if (saved === "en" || saved === "th") return saved;
     return (navigator.language || "").toLowerCase().startsWith("th") ? "th" : "en";
@@ -93,10 +103,12 @@
       if (next === lang || !DICT[next]) return;
       local.set(LANG_KEY, next);
       applyLang(next);
+      syncUrl(next);
     });
   });
 
   applyLang(initialLang());
+  syncUrl(lang);
 
   /* ---------- hero prompt typewriter ---------- */
   // Starts from the full first prompt (already in the DOM): hold, delete, type the next one.
