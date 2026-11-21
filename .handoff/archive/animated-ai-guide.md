@@ -1,8 +1,8 @@
 ---
 title: Animated AI guide page at /de-faults/ (TH/EN)
-status: open
+status: done
 severity: medium
-next: 
+next: user
 blocked_on: 
 created: 2026-11-21
 updated: 2026-11-21
@@ -71,3 +71,5 @@ Decisions:
 - 2026-11-21 claude-14598724: open — Pixel-art reskin + pixelfx effects built, Playwright 46/46 locally, uncommitted. Next: user review, then commit; push to main only with OK (auto-deploys prod).
 - 2026-11-21 claude: open — Agent tooling added (uncommitted): `./dev` (init/worker/map/check/live/deploy/pixelfx), `scripts/`, AGENTS.md + CLAUDE.md, README trimmed, CI runs check + `./dev live`. Page code untouched.
 - 2026-11-21 claude-4709affc: open — How-to recipes section added (uncommitted), check ok, Playwright 12/12. Next: user review, then commit; push to main only with OK.
+- 2026-11-21 claude-4709affc: blocked [blocked on: Live /de-faults/* = 404: yummlab-site live version 779b4f6f has no DE_FAULTS binding; binding + routing are in 2 unpushed yummlab.site commits (5abcb0a, b2966c4). Also GitHub production env of de-faults has no CLOUDFLARE_API_TOKEN/ACCOUNT_ID, so CI deploy fails; worker deployed manually via ./dev deploy (version 414c674c).]
+- 2026-11-21 claude-4709affc: done [evidence: Live https://yummlab.site/de-faults/ 200; ./dev live all files ok vs df8cf64 (worker 414c674c via ./dev deploy; main site binding shipped in yummlab.site 4619ed7, Deploy run 44921049824 green). Playwright vs production: all feature checks pass; only console error is the Cloudflare Web Analytics beacon blocked by CSP, same on the main site. Open: de-faults GitHub production env lacks CLOUDFLARE_API_TOKEN/ACCOUNT_ID, so CI deploy fails.]
